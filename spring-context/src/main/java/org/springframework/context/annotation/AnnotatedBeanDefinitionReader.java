@@ -83,6 +83,7 @@ public class AnnotatedBeanDefinitionReader {
 	 */
 	public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry) {
 		//一般是由spring创建的 getOrCreateEnvironment(registry);
+		//spring核心注入
 		this(registry, getOrCreateEnvironment(registry));
 	}
 
@@ -96,11 +97,15 @@ public class AnnotatedBeanDefinitionReader {
 	 *                    profiles.
 	 * @since 3.1
 	 */
+	/**
+	 *
+	 */
 	public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry, Environment environment) {
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		Assert.notNull(environment, "Environment must not be null");
 		this.registry = registry;
 		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);
+		//向Spring中注入注解配置处理器 重点
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
 	}
 

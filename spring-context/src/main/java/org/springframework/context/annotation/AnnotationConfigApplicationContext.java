@@ -62,6 +62,13 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
 	 */
 	public AnnotationConfigApplicationContext() {
+		super();
+		/**
+		 *super(); 这里里会调用一个默认的super()
+		 * 方法在里面构建了一个 DefaultListableBeanFactory 对象 这个对象会在后面的
+		 * AbstractApplicationContext#obtainFreshBeanFactory() 中使用到
+		 */
+
 		/**
 		 * 创建一个被注解的BeanDefinition读取器
 		 * public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry)通过这个构造方法来创建的那么

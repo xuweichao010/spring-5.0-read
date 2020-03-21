@@ -260,7 +260,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * Build and validate a configuration model based on the registry of
 	 * {@link Configuration} classes.
 	 */
-	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
+	public void  processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
 		//定义一个list存放Spring中被@Compent 注释的类
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
 		//获取所有的BeanDefinition的名字

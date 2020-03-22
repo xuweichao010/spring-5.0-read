@@ -129,7 +129,9 @@ class ComponentScanAnnotationParser {
 				return declaringClass.equals(className);
 			}
 		});
-		//扫描指定包下的类并加入到map中去
+		/**
+		 * 扫描配置的包路径，并把扫描的到的类创建BeanDefinition 放入到BeanDefinitionRegistry中
+		 */
 		return scanner.doScan(StringUtils.toStringArray(basePackages));
 	}
 

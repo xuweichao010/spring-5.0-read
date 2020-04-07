@@ -35,6 +35,7 @@ public class TestSpring {
  						1.1.2.1.1.1.4 如果注册器中不包含 CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME（internalConfigurationAnnotationProcessor）这个对象 则往注册器中添加一个
  									  ConfigurationClassPostProcessor对象并且名字为internalConfigurationAnnotationProcessor 需要注意的是 ConfigurationClassPostProcessor <-i-
  									  BeanDefinitionRegistryPostProcessor <-e- BeanFactoryPostProcessor
+ 						1.1.2.1.1.1.5 TODO（后面用到再写）
  		1.2.3 创建一个 ClassPathBeanDefinitionScanner#ClassPathBeanDefinitionScanner(BeanDefinitionRegistry) bean的定义扫描器（真正的bean的扫描不在这里）
  	1.2 调用 AnnotationConfigApplicationContext#register(java.lang.Class[])方法
  		1.2.1 调用在1.1.2创建的读取器并调用他的 AnnotatedBeanDefinitionReader#register(Class[]) 注册一个被注解的Class数组 这里只用我们在1中传入的配置对象。

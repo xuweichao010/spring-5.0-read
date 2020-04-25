@@ -239,10 +239,36 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
 
+		/**
+		 *
+		 * 1、name 可能会以 & 字符开头，表明调用者想获取 FactoryBean 本身，而非 FactoryBean
+		 *   实现类所创建的 bean。在 BeanFactory 中，FactoryBean 的实现类和其他的 bean 存储
+		 *   方式是一致的，即 <beanName, bean>，beanName 中是没有 & 这个字符的。所以我们需要
+		 *   将 name 的首字符 & 移除，这样才能从缓存里取到 FactoryBean 实例。
+		 * 2、还是别名的问题，转换需要
+		 * &beanName
+		 */
+		/**
+		 * 通过 name 获取 beanName。这里调用一下transformedBeanName有两个原因
+		 * 1：name中可能以&字符开头，说明用户需要获取FactoryBean对象，而非FactoryBean#getObject()的对象，而FactoryBean的实现类和
+		 * 		其他的Bean存储方式是一样的，[beanName->FactoryBean].
+		 * 2: 处理Bean的别名问题
+		 */
 		final String beanName = transformedBeanName(name);
 		Object bean;
 
 		// Eagerly check singleton cache for manually registered singletons.
+		/**
+		 * 这个方法在初始化的时候会调用，在getBean的时候也会调用
+		 * 为什么要这么做呢？
+		 * 		也就是说spring在初始化的时候先获取这个对象
+		 * 		判断这个对象是否被实例化好了(普通情况下绝对为空====有一种情况可能不为空)
+		 * 		从spring的bean容器中获取一个bean，由于spring中bean容器是一个map（singletonObjects）
+		 * 		所以你可以理解getSingleton(beanName)等于beanMap.get(beanName)
+		 * 		由于方法会在spring环境初始化的时候（就是对象被创建的时候调用一次）调用一次
+		 * 		还会在getBean的时候调用一次
+		 * 	    需要说明的是在初始化时候调用一般都是返回null
+		 */
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isDebugEnabled()) {
@@ -254,12 +280,21 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.debug("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
+			/**
+			 * 如果 sharedInstance 是普通的单例 bean，下面的方法会直接返回。但如果
+			 * sharedInstance 是 FactoryBean 类型的，则需调用 getObject 工厂方法获取真正的
+			 * bean 实例。如果用户想获取 FactoryBean 本身，这里也不会做特别的处理，直接返回
+			 * 即可。毕竟 FactoryBean 的实现类本身也是一种 bean，只不过具有一点特殊的功能而已。
+			 */
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
 		else {
 			// Fail if we're already creating this bean instance:
 			// We're assumably within a circular reference.
+			/**
+			 * 如果是原型不应该在初始化的时候创建
+			 */
 			if (isPrototypeCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
@@ -284,6 +319,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			if (!typeCheckOnly) {
+				/**
+				 *  添加到alreadyCreated set集合当中，表示他已经创建过了 防止重复创建
+				 */
 				markBeanAsCreated(beanName);
 			}
 
@@ -292,6 +330,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				checkMergedBeanDefinition(mbd, beanName, args);
 
 				// Guarantee initialization of beans that the current bean depends on.
+				/**
+				 * 处理Spring中 @DependsOn注解
+				 */
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {

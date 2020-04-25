@@ -202,6 +202,9 @@ final class PostProcessorRegistrationDelegate {
 	public static void registerBeanPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, AbstractApplicationContext applicationContext) {
 
+		/**
+		 * 从BeanDefinition中获得所有的实现了BeanPostProcessor接口的定义
+		 */
 		String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class, true, false);
 
 		// Register BeanPostProcessorChecker that logs an info message when
@@ -212,9 +215,21 @@ final class PostProcessorRegistrationDelegate {
 
 		// Separate between BeanPostProcessors that implement PriorityOrdered,
 		// Ordered, and the rest.
+		/**
+		 * 有实现优先接排序的BeanPostProcessor
+		 */
 		List<BeanPostProcessor> priorityOrderedPostProcessors = new ArrayList<>();
+		/**
+		 * 有定义信息合并的BeanPostProcessor
+		 */
 		List<BeanPostProcessor> internalPostProcessors = new ArrayList<>();
+		/**
+		 *  有实现排序接口BeanPostProcessor
+		 */
 		List<String> orderedPostProcessorNames = new ArrayList<>();
+		/**
+		 * 没有任何排序的BeanPostProcessor
+		 */
 		List<String> nonOrderedPostProcessorNames = new ArrayList<>();
 		for (String ppName : postProcessorNames) {
 			if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
@@ -231,6 +246,9 @@ final class PostProcessorRegistrationDelegate {
 		}
 
 		// First, register the BeanPostProcessors that implement PriorityOrdered.
+		/**
+		 * 对有实现了优先级排序的BeanPostProcessor进行排序
+		 */
 		sortPostProcessors(priorityOrderedPostProcessors, beanFactory);
 		registerBeanPostProcessors(beanFactory, priorityOrderedPostProcessors);
 

@@ -13,9 +13,20 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan("com.xwc")
 public class TestSpring {
 	public static void main(String[] args) {
+		//1.
 		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(TestSpring.class);
 	}
 }
+/**
+ 1、创建 DefaultListableBeanFactory 对象
+ 2、创建 AnnotatedBeanDefinitionReader对象中注册了一个ConfigurationClassPostProcessor对象名字叫internalConfigurationAnnotationProcessor
+
+
+
+
+
+ */
+
 /**
 1.通过 AnnotationConfigApplicationContext#AnnotationConfigApplicationContext(java.lang.Class[])方法创建
 1.1在这个方法中调用this()默认的无参构造->AnnotationConfigApplicationContext#AnnotationConfigApplicationContext()

@@ -228,31 +228,52 @@ final class PostProcessorRegistrationDelegate {
 		 */
 		List<String> orderedPostProcessorNames = new ArrayList<>();
 		/**
-		 * 没有任何排序的BeanPostProcessor
+		 * 没有任何排序的 BeanPostProcessor
 		 */
 		List<String> nonOrderedPostProcessorNames = new ArrayList<>();
 		for (String ppName : postProcessorNames) {
 			if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
+				/**
+				 * 创建 有优先级的BeanPostProcessor
+				 */
 				BeanPostProcessor pp = beanFactory.getBean(ppName, BeanPostProcessor.class);
+				/**
+				 * 添加到有优先级队列的数组中
+				 */
 				priorityOrderedPostProcessors.add(pp);
 				if (pp instanceof MergedBeanDefinitionPostProcessor) {
+					/**
+					 * 添加到有定义信息合并的数组中
+					 */
 					internalPostProcessors.add(pp);
 				}
 			} else if (beanFactory.isTypeMatch(ppName, Ordered.class)) {
+				/**
+				 * 添加到有排序接口的数组中
+				 */
 				orderedPostProcessorNames.add(ppName);
 			} else {
+				/**
+				 * 添加到没有任何优先级的数组中
+				 */
 				nonOrderedPostProcessorNames.add(ppName);
 			}
 		}
 
 		// First, register the BeanPostProcessors that implement PriorityOrdered.
 		/**
-		 * 对有实现了优先级排序的BeanPostProcessor进行排序
+		 * 对有实现了优先级排序的 BeanPostProcessor 进行排序
 		 */
 		sortPostProcessors(priorityOrderedPostProcessors, beanFactory);
+		/**
+		 * 注册优先级排序的Bean,主要是给 beanFactory的标志位负值
+		 */
 		registerBeanPostProcessors(beanFactory, priorityOrderedPostProcessors);
 
 		// Next, register the BeanPostProcessors that implement Ordered.
+		/**
+		 * 处理实现了Order接口的  BeanPostProcessor
+		 */
 		List<BeanPostProcessor> orderedPostProcessors = new ArrayList<>();
 		for (String ppName : orderedPostProcessorNames) {
 			BeanPostProcessor pp = beanFactory.getBean(ppName, BeanPostProcessor.class);

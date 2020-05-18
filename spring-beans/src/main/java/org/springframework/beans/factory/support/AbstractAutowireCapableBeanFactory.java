@@ -593,7 +593,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		try {
 			//设置属性，非常重要
 			populateBean(beanName, mbd, instanceWrapper);
-			//执行后置处理器，aop就是在这里完成的处理
+			//执行后置处理器，aop切面织入就在这里完成的。
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
 		catch (Throwable ex) {

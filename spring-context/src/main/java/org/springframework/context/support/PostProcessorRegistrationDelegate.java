@@ -142,6 +142,7 @@ final class PostProcessorRegistrationDelegate {
 			 *  前面执行的BeanFactoryPostProcessor的子类BeanDefinitionRegistryPostProcessor的回调
 			 *  这是执行的是父类的BeanFactoryPostProcessor回调postProcessBeanFactory
 			 *  ConfuguratuonClassPpostProcssor = registryProcessors
+			 *  TODO 这里有个@Configruation增强
 			 */
 			invokeBeanFactoryPostProcessors(registryProcessors, beanFactory);
 			/**

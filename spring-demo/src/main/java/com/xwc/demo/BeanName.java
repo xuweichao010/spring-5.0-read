@@ -1,7 +1,6 @@
 package com.xwc.demo;
 
-import jdk.nashorn.internal.objects.annotations.Constructor;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,11 +10,13 @@ import org.springframework.stereotype.Component;
  */
 @Component("beanName")
 public class BeanName {
+	@Autowired
+	private AutowiredBean autowiredBean;
+	private TestSpring testSpring;
 
-	public BeanName() {
-	}
 
-	public BeanName( TestSpring testSpring){
+	public BeanName(TestSpring testSpring) {
+		this.testSpring = testSpring;
 		System.out.println("TestSpring");
 	}
 

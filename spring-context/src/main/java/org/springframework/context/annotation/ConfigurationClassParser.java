@@ -328,12 +328,14 @@ class ConfigurationClassParser {
 		}
 
 		// Process individual @Bean methods
+		//处理Bean注解
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));
 		}
 
 		// Process default methods on interfaces
+		// 在configuration类实现的接口上注册默认方法
 		processInterfaces(configClass, sourceClass);
 
 		// Process superclass, if any

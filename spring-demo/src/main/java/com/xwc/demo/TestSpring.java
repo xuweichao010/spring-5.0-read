@@ -3,6 +3,7 @@ package com.xwc.demo;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * 作者：徐卫超（cc）
@@ -10,7 +11,8 @@ import org.springframework.context.annotation.Configuration;
  * 描述：
  */
 @Configuration
-@ComponentScan("com.xwc")
+@ComponentScan("com.xwc.demo")
+@EnableAspectJAutoProxy
 public class TestSpring {
 	public static void main(String[] args) {
 		//1.
@@ -19,7 +21,7 @@ public class TestSpring {
 }
 /**
  1、创建 DefaultListableBeanFactory 对象
- 2、创建 AnnotatedBeanDefinitionReader对象中注册了一个ConfigurationClassPostProcessor对象名字叫internalConfigurationAnnotationProcessor
+ 2、创建 AnnotatedBeanDefinitionReader对象中注册了一个 ConfigurationClassPostProcessor 对象名字叫internalConfigurationAnnotationProcessor
 
 
 
